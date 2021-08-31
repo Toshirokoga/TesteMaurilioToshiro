@@ -1,0 +1,73 @@
+unit ClassConexao;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
+  FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+
+  TConexao = class
+
+  private
+    FConection : TFDConnection;
+
+    procedure GetConfiguracao;
+    function GetQuery: TFDQuery;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    function GetConexao: TFDConnection;
+
+  end;
+
+implementation
+
+{ TConexao }
+
+constructor TConexao.Create;
+begin
+  FConection := TFDConnection.Create(nil);
+  Self.GetConfiguracao;
+end;
+
+destructor TConexao.Destroy;
+begin
+  FreeAndNil(FConection);
+  inherited;
+end;
+
+function TConexao.GetConexao: TFDConnection;
+begin
+  Result := FConection;
+end;
+
+procedure TConexao.GetConfiguracao;
+begin
+  FConection.Params.Clear;
+  FConection.Params.Add('DriverID=MYSQL');
+  FConection.Params.Add('Database=teste_toshiro');
+  FConection.Params.Add('UserName=root');
+  FConection.Params.Add('Password=spt3030');
+  FConection.Params.Add('Server=localhost');
+  FConection.Params.Add('Port=3309');
+
+
+  FConection.LoginPrompt     := False;
+  FConection.Connected := True;
+end;
+
+function TConexao.GetQuery: TFDQuery;
+var
+  vQry: TFDQuery;
+begin
+  vQry := TFDQuery.Create(nil);
+  vQry.Connection := FConection;
+  Result := vQry;
+end;
+
+end.

@@ -1,0 +1,90 @@
+unit ClassConexao;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
+  FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client;
+
+type
+
+  TConexao = class
+
+  private
+    FConection : TFDConnection;
+    FMsgErro   : String;
+    //FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
+
+    procedure GetConfiguracao;
+    function GetQuery: TFDQuery;
+    procedure SetMsgErro(const Value: String);
+  public
+    constructor Create;
+    destructor Destroy; override;
+    function Conectar: Boolean;
+
+    property MsgErro: String read FMsgErro write SetMsgErro;
+
+  end;
+
+implementation
+
+{ TConexao }
+
+constructor TConexao.Create;
+begin
+  FConection := TFDConnection.Create(nil);
+//  FDPhysMySQLDriverLink1 := TFDPhysMySQLDriverLink.Create(FConection);
+  Self.GetConfiguracao;
+end;
+
+destructor TConexao.Destroy;
+begin
+//  FreeAndNil(FDPhysMySQLDriverLink1);
+  FreeAndNil(FConection);
+  inherited;
+end;
+
+function TConexao.Conectar: Boolean;
+begin
+  Result := True;
+  try
+    FConection.Connected    := True;
+  except
+    on E: Exception do begin
+      MsgErro := E.Message;
+      Result  := False;
+    end;
+  end;
+end;
+
+procedure TConexao.GetConfiguracao;
+begin
+  FConection.Params.Clear;
+  FConection.Params.Add('DriverID=MySQL');
+  FConection.Params.Add('Database=teste_toshiro');
+  FConection.Params.Add('User_Name=root');
+  FConection.Params.Add('Password=spt3030');
+  FConection.Params.Add('Server=localhost');
+  FConection.Params.Add('Port=3309');
+  FConection.LoginPrompt  := False;
+  //FDPhysMySQLDriverLink1.VendorLib := 'E:\TesteMaurilioToshiro\Win32\Debug\libmysql.dll';
+end;
+
+function TConexao.GetQuery: TFDQuery;
+var
+  vQry: TFDQuery;
+begin
+  vQry := TFDQuery.Create(nil);
+  vQry.Connection := FConection;
+  Result := vQry;
+end;
+
+procedure TConexao.SetMsgErro(const Value: String);
+begin
+  FMsgErro := Value;
+end;
+
+end.

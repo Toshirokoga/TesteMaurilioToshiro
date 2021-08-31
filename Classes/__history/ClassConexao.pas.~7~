@@ -1,0 +1,143 @@
+unit ClassConexao;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
+  FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client,
+  FireDAC.Dapt;
+
+type
+
+  TConexao = class
+
+  private
+    FConection : TFDConnection;
+    FMsgErro   : String;
+    FQuery     : TFDQuery;
+
+    procedure GetConfiguracao;
+    procedure SetMsgErro(const Value: String);
+//    procedure CriaQuery;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    function Conectar: Boolean;
+    function Conectado: Boolean;
+    procedure PreparaQuery(pSQSL: String);
+    procedure AbreQuery(var pErro: String);
+    procedure PassaParametro(cParametro: String; pValor: Variant);
+    procedure ExecutaQuery(var pErro: String);
+    procedure LimpaQuery;
+
+    property MsgErro: String    read FMsgErro write SetMsgErro;
+    property Query  : TFDQuery  read FQuery   write FQuery;
+
+  end;
+
+implementation
+
+{ TConexao }
+
+constructor TConexao.Create;
+begin
+  FConection := TFDConnection.Create(nil);
+  Self.GetConfiguracao;
+  FQuery := TFDQuery.Create(FConection);
+  FQuery.Connection := FConection;
+end;
+
+destructor TConexao.Destroy;
+begin
+  FreeAndNil(FQuery);
+  FreeAndNil(FConection);
+  inherited;
+end;
+
+procedure TConexao.ExecutaQuery(var pErro: String);
+begin
+  try
+    FQuery.ExecSQL;
+  except
+    on E: Exception do begin
+      pErro := E.Message;
+    end;
+  end;
+end;
+
+procedure TConexao.AbreQuery(var pErro: String);
+begin
+  try
+    FQuery.Open;
+  except
+    on E: Exception do begin
+      pErro := E.Message;
+    end;
+  end;
+end;
+
+function TConexao.Conectado: Boolean;
+begin
+  Result := FConection.Connected;
+end;
+
+function TConexao.Conectar: Boolean;
+begin
+  Result := True;
+  try
+    FConection.Connected    := True;
+  except
+    on E: Exception do begin
+      MsgErro := E.Message;
+      Result  := False;
+    end;
+  end;
+end;
+
+procedure TConexao.GetConfiguracao;
+begin
+  FConection.Params.Clear;
+  FConection.Params.Add('DriverID=MySQL');
+  FConection.Params.Add('Database=teste_toshiro');
+  FConection.Params.Add('User_Name=root');
+  FConection.Params.Add('Password=spt3030');
+  FConection.Params.Add('Server=localhost');
+  FConection.Params.Add('Port=3309');
+  FConection.LoginPrompt  := False;
+end;
+
+
+procedure TConexao.LimpaQuery;
+begin
+  FQuery.SQL.Clear;
+end;
+
+//procedure TConexao.LimpaQuery;
+//begin
+//  FreeAndNil(FQuery);
+//end;
+
+procedure TConexao.PassaParametro(cParametro: String; pValor: Variant);
+begin
+  FQuery.ParamByName(cParametro).Value := pValor;
+end;
+
+procedure TConexao.PreparaQuery(pSQSL: String);
+begin
+  FQuery.SQL.Add(pSQSL);
+end;
+
+//procedure TConexao.CriaQuery;
+//begin
+//  FQuery := FQuery.Create(nil);
+//  FQuery.Connection := FConection;
+//end;
+
+procedure TConexao.SetMsgErro(const Value: String);
+begin
+  FMsgErro := Value;
+end;
+
+end.

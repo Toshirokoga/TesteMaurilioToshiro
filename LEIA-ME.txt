@@ -1,0 +1,2 @@
+Para rodar o sistema é preciso configurar o arquivo ini junto com o executável, conforme ini dentro da pasta debub\win32
+

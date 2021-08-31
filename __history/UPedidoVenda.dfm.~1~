@@ -1,0 +1,98 @@
+object FrmPedidoVenda: TFrmPedidoVenda
+  Left = 0
+  Top = 0
+  BorderStyle = bsNone
+  Caption = 'Pedido de Venda'
+  ClientHeight = 662
+  ClientWidth = 1055
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pnlInferior: TPanel
+    Left = 0
+    Top = 608
+    Width = 1055
+    Height = 54
+    Align = alBottom
+    TabOrder = 0
+    object btnFechar: TButton
+      Left = 960
+      Top = 1
+      Width = 94
+      Height = 52
+      Align = alRight
+      Caption = 'Fechar'
+      TabOrder = 0
+      ExplicitHeight = 78
+    end
+    object btnConfirmar: TButton
+      Left = 866
+      Top = 1
+      Width = 94
+      Height = 52
+      Align = alRight
+      Caption = 'Confirmar'
+      TabOrder = 1
+      ExplicitLeft = 960
+      ExplicitHeight = 78
+    end
+  end
+  object pnlCabecalho: TPanel
+    Left = 0
+    Top = 0
+    Width = 1055
+    Height = 329
+    Align = alTop
+    Caption = 'pnlCabecalho'
+    TabOrder = 1
+  end
+  object pnlItens: TPanel
+    Left = 0
+    Top = 329
+    Width = 1055
+    Height = 279
+    Align = alClient
+    TabOrder = 2
+    ExplicitLeft = 8
+    ExplicitTop = 281
+    ExplicitHeight = 257
+    object DBGrid1: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 1053
+      Height = 277
+      Align = alClient
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+    end
+  end
+  object pnlCadastroItem: TPanel
+    Left = 152
+    Top = 184
+    Width = 721
+    Height = 281
+    TabOrder = 3
+  end
+  object CDSItens: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 952
+    Top = 41
+  end
+  object DItens: TDataSource
+    DataSet = CDSItens
+    Left = 1000
+    Top = 41
+  end
+end

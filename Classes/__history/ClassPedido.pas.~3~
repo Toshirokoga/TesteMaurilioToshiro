@@ -1,0 +1,191 @@
+unit ClassPedido;
+
+interface
+
+uses System.Generics.Collections, ClassConexao;
+
+type
+
+  TPedido = Class
+
+    public type
+
+      TItensPedido = Class
+        private
+          FVlrTotal   : Double;
+          FNumPedido  : Integer;
+          FItem       : Integer;
+          FQuantidade : Double;
+          FVlrUnit    : Double;
+          FCodProduto : Integer;
+
+          procedure SetCodProduto(const Value: Integer);
+          procedure SetItem(const Value: Integer);
+          procedure SetNumPedido(const Value: Integer);
+          procedure SetQuantidade(const Value: Double);
+          procedure SetVlrTotal(const Value: Double);
+          procedure SetVlrUnit(const Value: Double);
+
+        public
+          property Item       : Integer   read FItem        write SetItem;
+          property NumPedido  : Integer   read FNumPedido   write SetNumPedido;
+          property CodProduto : Integer   read FCodProduto  write SetCodProduto;
+          property Quantidade : Double    read FQuantidade  write SetQuantidade;
+          property VlrUnit    : Double    read FVlrUnit     write SetVlrUnit;
+          property VlrTotal   : Double    read FVlrTotal    write SetVlrTotal;
+
+      End;
+
+    private
+      FVlrTotal   : Double;
+      FCodCliente : Integer;
+      FListaItens : TObjectList<TItensPedido>;
+      FNumPedido  : Integer;
+      FDtEmissao  : TDateTime;
+      Conexao     : TConexao;
+      FMsgErro    : String;
+
+      procedure SetCodCliente(const Value: Integer);
+      procedure SetDtEmissao(const Value: TDateTime);
+      procedure SetNumPedido(const Value: Integer);
+      procedure SetVlrTotal(const Value: Double);
+    procedure SetMsgErro(const Value: String);
+
+    public
+      constructor Create;
+      destructor Destroy; override;
+      function GravarPedido: Boolean;
+
+      property NumPedido  : Integer                   read FNumPedido   write SetNumPedido ;
+      property DtEmissao  : TDateTime                 read FDtEmissao   write SetDtEmissao;
+      property CodCliente : Integer                   read FCodCliente  write SetCodCliente;
+      property VlrTotal   : Double                    read FVlrTotal    write SetVlrTotal;
+      property ListaItens : TObjectList<TItensPedido> read FListaItens  write FListaItens;
+      property MsgErro    : String                    read FMsgErro     write SetMsgErro;
+  End;
+
+implementation
+
+uses
+  System.SysUtils;
+
+{ TPedido.TItensPedido }
+
+procedure TPedido.TItensPedido.SetCodProduto(const Value: Integer);
+begin
+  FCodProduto := Value;
+end;
+
+procedure TPedido.TItensPedido.SetItem(const Value: Integer);
+begin
+  FItem := Value;
+end;
+
+procedure TPedido.TItensPedido.SetNumPedido(const Value: Integer);
+begin
+  FNumPedido := Value;
+end;
+
+procedure TPedido.TItensPedido.SetQuantidade(const Value: Double);
+begin
+  FQuantidade := Value;
+end;
+
+procedure TPedido.TItensPedido.SetVlrTotal(const Value: Double);
+begin
+  FVlrTotal := Value;
+end;
+
+procedure TPedido.TItensPedido.SetVlrUnit(const Value: Double);
+begin
+  FVlrUnit := Value;
+end;
+
+{ TPedido }
+
+constructor TPedido.Create;
+begin
+  FListaItens := TObjectList<TItensPedido>.Create;
+end;
+
+destructor TPedido.Destroy;
+begin
+  FreeAndNil(FListaItens);
+  inherited;
+end;
+
+function TPedido.GravarPedido: Boolean;
+var
+  cSQL,
+  cSQLItem: String;
+  bConectado: Boolean;
+  nI: Integer;
+begin
+  Result := True;
+
+  if not Conexao.Conectado then begin
+    bConectado := Conexao.Conectar;
+  end;
+
+  if bConectado then begin
+    cSQL := 'INSERT INTO PEDIDO(  DT_EMISSAO,   COD_CLI,   VLR_TOTAL) '+
+            '            VALUES(:PDT_EMISSAO, :PCOD_CLI, :PVLR_TOTAL) ';
+    Conexao.PreparaQuery(cSQL);
+    Conexao.PassaParametro('PDT_EMISSAO', FDtEmissao);
+    Conexao.PassaParametro('PCOD_CLI'   , FCodCliente);
+    Conexao.PassaParametro('PVLR_TOTAL' , FVlrTotal);
+    Conexao.ExecutaQuery(FMsgErro);
+
+    if FMsgErro <> '' then begin
+      Result := False;
+      Abort;
+    end;
+
+    cSQLItem := 'INSERT INTO ITENS_PEDIDO(  NUM_PEDIDO,   ITEM,   COD_PROD,   QUANTIDADE,   VLR_UNIT,   VLR_TOTAL) '+
+                '                  VALUES(:PNUM_PEDIDO, :PITEM, :PCOD_PROD, :PQUANTIDADE, :PVLR_UNIT, :PVLR_TOTAL) ';
+
+    for nI := 0 to ListaItens.Count - 1 do begin
+      Conexao.LimpaQuery;
+      Conexao.PreparaQuery(cSQLItem);
+      Conexao.PassaParametro('PNUM_PEDIDO', ListaItens[nI].NumPedido);
+      Conexao.PassaParametro('PITEM'      , ListaItens[nI].Item);
+      Conexao.PassaParametro('PCOD_PROD'  , ListaItens[nI].CodProduto);
+      Conexao.PassaParametro('PQUANTIDADE', ListaItens[nI].Quantidade);
+      Conexao.PassaParametro('PVLR_UNIT'  , ListaItens[nI].VlrUnit);
+      Conexao.PassaParametro('PVLR_TOTAL' , ListaItens[nI].VlrTotal);
+      Conexao.ExecutaQuery(FMsgErro);
+
+      if FMsgErro <> '' then begin
+        Result := False;
+        Abort;
+      end;
+    End;
+  end;
+end;
+
+procedure TPedido.SetCodCliente(const Value: Integer);
+begin
+  FCodCliente := Value;
+end;
+
+procedure TPedido.SetDtEmissao(const Value: TDateTime);
+begin
+  FDtEmissao := Value;
+end;
+
+procedure TPedido.SetMsgErro(const Value: String);
+begin
+  FMsgErro := Value;
+end;
+
+procedure TPedido.SetNumPedido(const Value: Integer);
+begin
+  FNumPedido := Value;
+end;
+
+procedure TPedido.SetVlrTotal(const Value: Double);
+begin
+  FVlrTotal := Value;
+end;
+
+end.

@@ -1,0 +1,69 @@
+unit ClassProduto;
+
+interface
+
+uses ClassConexao;
+
+type
+
+  TProduto = class
+    FCodigo     : Integer;
+    FDescricao  : String;
+    FPrecoVenda : Double;
+
+  private
+    procedure SetCodigo(const Value: Integer);
+    procedure SetDescricao(const Value: String);
+    procedure setPrecoVenda(const Value: Double);
+
+  protected
+
+  public
+    constructor Create;
+    destructor Destroy; override;
+    function ValidaExiste(pCliente: Integer): Boolean;
+
+  published
+    property Codigo         : Integer   read FCodigo     write SetCodigo;
+    property Descricao      : String    read FDescricao  write SetDescricao;
+    property PrecoVenda     : Double    read FPrecoVenda write setPrecoVenda;
+  end;
+
+implementation
+var
+  Conexao: TConexao;
+
+{ TProduto }
+
+constructor TProduto.Create;
+begin
+  Conexao := TConexao.Create;
+end;
+
+destructor TProduto.Destroy;
+begin
+  Conexao.Free;
+  inherited;
+end;
+
+procedure TProduto.SetCodigo(const Value: Integer);
+begin
+  FCodigo := Value;
+end;
+
+procedure TProduto.SetDescricao(const Value: String);
+begin
+  FDescricao := Value;
+end;
+
+procedure TProduto.setPrecoVenda(const Value: Double);
+begin
+  FPrecoVenda := Value;
+end;
+
+function TProduto.ValidaExiste(pCliente: Integer): Boolean;
+begin
+  Result := False;
+end;
+
+end.

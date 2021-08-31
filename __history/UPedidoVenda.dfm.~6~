@@ -1,0 +1,407 @@
+object FrmPedidoVenda: TFrmPedidoVenda
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = 'Pedido de Venda'
+  ClientHeight = 521
+  ClientWidth = 691
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pnlInferior: TPanel
+    Left = 0
+    Top = 467
+    Width = 691
+    Height = 54
+    Align = alBottom
+    TabOrder = 0
+    object lblTotalPedido: TLabel
+      AlignWithMargins = True
+      Left = 22
+      Top = 25
+      Width = 160
+      Height = 19
+      Align = alCustom
+      Alignment = taCenter
+      Caption = 'Valor total: R$ 0,00'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ExplicitLeft = 19
+      ExplicitTop = 22
+    end
+    object btnFechar: TButton
+      Left = 596
+      Top = 1
+      Width = 94
+      Height = 52
+      Align = alRight
+      Caption = 'Fechar'
+      TabOrder = 0
+      OnClick = btnFecharClick
+    end
+    object btnConfirmar: TButton
+      Left = 502
+      Top = 1
+      Width = 94
+      Height = 52
+      Align = alRight
+      Caption = 'Confirmar'
+      TabOrder = 1
+    end
+  end
+  object pnlCabecalho: TPanel
+    Left = 0
+    Top = 0
+    Width = 691
+    Height = 137
+    Align = alTop
+    TabOrder = 1
+    object btnPesqPedidos: TSpeedButton
+      Left = 87
+      Top = 24
+      Width = 25
+      Height = 21
+      Hint = 'Pesquisar Pedidos'
+      ParentShowHint = False
+      ShowHint = True
+      Visible = False
+    end
+    object Label1: TLabel
+      Left = 456
+      Top = 10
+      Width = 58
+      Height = 13
+      Caption = 'Data Pedido'
+    end
+    object EditCliente: TLabeledEdit
+      Left = 16
+      Top = 24
+      Width = 65
+      Height = 21
+      EditLabel.Width = 33
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Cliente'
+      NumbersOnly = True
+      TabOrder = 0
+      TextHint = 'C'#243'd. Cliente'
+      OnChange = EditClienteChange
+      OnEnter = EditClienteEnter
+      OnExit = EditClienteExit
+    end
+    object DateTimePicker1: TDateTimePicker
+      Left = 456
+      Top = 24
+      Width = 97
+      Height = 21
+      Date = 44436.740164791660000000
+      Time = 44436.740164791660000000
+      TabOrder = 1
+    end
+    object EditNomeCliente: TEdit
+      Left = 120
+      Top = 24
+      Width = 305
+      Height = 21
+      Color = clGradientActiveCaption
+      ReadOnly = True
+      TabOrder = 2
+      TextHint = 'Nome do cliente'
+    end
+    object EditVlrTotal: TLabeledEdit
+      Left = 568
+      Top = 24
+      Width = 113
+      Height = 21
+      EditLabel.Width = 61
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Valor Total'
+      EditLabel.Font.Charset = DEFAULT_CHARSET
+      EditLabel.Font.Color = clWindowText
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = [fsBold]
+      EditLabel.ParentFont = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 3
+    end
+    object Panel1: TPanel
+      Left = 1
+      Top = 80
+      Width = 689
+      Height = 56
+      Align = alBottom
+      Caption = 'Itens Pedido'
+      TabOrder = 4
+      object btnInserirItem: TButton
+        Left = 1
+        Top = 1
+        Width = 75
+        Height = 54
+        Align = alLeft
+        Caption = 'Inserir'
+        TabOrder = 0
+        OnClick = btnInserirItemClick
+      end
+      object btnAlterarItem: TButton
+        Left = 76
+        Top = 1
+        Width = 75
+        Height = 54
+        Align = alLeft
+        Caption = 'Alterar'
+        TabOrder = 1
+        OnClick = btnAlterarItemClick
+      end
+      object btnExcluirItem: TButton
+        Left = 151
+        Top = 1
+        Width = 75
+        Height = 54
+        Align = alLeft
+        Caption = 'Excluir'
+        TabOrder = 2
+        OnClick = btnExcluirItemClick
+      end
+    end
+  end
+  object pnlItens: TPanel
+    Left = 0
+    Top = 137
+    Width = 691
+    Height = 330
+    Align = alClient
+    TabOrder = 2
+    object DBGridItens: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 689
+      Height = 328
+      Align = alClient
+      DataSource = DItens
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnDrawColumnCell = DBGridItensDrawColumnCell
+      OnDblClick = DBGridItensDblClick
+      OnKeyDown = DBGridItensKeyDown
+      OnKeyPress = DBGridItensKeyPress
+      Columns = <
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'Produto'
+          Title.Alignment = taCenter
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'Descricao'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'Quantidade'
+          Title.Alignment = taCenter
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'Vlr_Unit'
+          Title.Alignment = taCenter
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'Vlr_Total'
+          Title.Alignment = taCenter
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+        end>
+    end
+  end
+  object pnlCadastroItem: TPanel
+    Left = 120
+    Top = 184
+    Width = 425
+    Height = 153
+    TabOrder = 3
+    object Panel2: TPanel
+      Left = 1
+      Top = 111
+      Width = 423
+      Height = 41
+      Align = alBottom
+      TabOrder = 0
+      object BtnCancelarItem: TButton
+        Left = 347
+        Top = 1
+        Width = 75
+        Height = 39
+        Align = alRight
+        Caption = 'Cancelar'
+        TabOrder = 0
+        OnClick = BtnCancelarItemClick
+      end
+      object btnGravarItem: TButton
+        Left = 272
+        Top = 1
+        Width = 75
+        Height = 39
+        Align = alRight
+        Caption = 'Gravar Item'
+        TabOrder = 1
+        OnClick = btnGravarItemClick
+      end
+    end
+    object EditProduto: TLabeledEdit
+      Left = 17
+      Top = 24
+      Width = 65
+      Height = 21
+      EditLabel.Width = 38
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Produto'
+      NumbersOnly = True
+      TabOrder = 1
+      TextHint = 'C'#243'd. Produto'
+      OnChange = EditClienteChange
+      OnEnter = EditClienteEnter
+      OnExit = EditProdutoExit
+    end
+    object EditDescricaoProduto: TEdit
+      Left = 88
+      Top = 24
+      Width = 321
+      Height = 21
+      Color = clGradientActiveCaption
+      ReadOnly = True
+      TabOrder = 2
+      TextHint = 'Nome do cliente'
+    end
+    object EditVlrUnit: TLabeledEdit
+      Left = 104
+      Top = 72
+      Width = 80
+      Height = 21
+      EditLabel.Width = 64
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Valor Unit'#225'rio'
+      EditLabel.Font.Charset = DEFAULT_CHARSET
+      EditLabel.Font.Color = clWindowText
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      TextHint = 'Valor Unit'#225'rio'
+    end
+    object EditQtde: TLabeledEdit
+      Left = 17
+      Top = 72
+      Width = 80
+      Height = 21
+      EditLabel.Width = 56
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Quantidade'
+      EditLabel.Font.Charset = DEFAULT_CHARSET
+      EditLabel.Font.Color = clWindowText
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      NumbersOnly = True
+      ParentFont = False
+      TabOrder = 4
+      TextHint = 'Quantidade'
+    end
+  end
+  object CDSItens: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 568
+    Top = 337
+    object CDSItensProduto: TIntegerField
+      FieldName = 'Produto'
+    end
+    object CDSItensDescricao: TStringField
+      FieldName = 'Descricao'
+      Size = 50
+    end
+    object CDSItensQuantidade: TFloatField
+      FieldName = 'Quantidade'
+    end
+    object CDSItensVlr_Unit: TFloatField
+      FieldName = 'Vlr_Unit'
+    end
+    object CDSItensVlr_Total: TFloatField
+      FieldName = 'Vlr_Total'
+    end
+  end
+  object DItens: TDataSource
+    DataSet = CDSItens
+    Left = 616
+    Top = 337
+  end
+end

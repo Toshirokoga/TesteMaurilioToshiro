@@ -1,0 +1,79 @@
+unit ClassCliente;
+
+interface
+
+uses ClassConexao;
+
+type
+
+  TCliente = class
+
+  private
+    FCodigo : Integer;
+    FNome   : String;
+    FCidade : String;
+    FUF     : String;
+
+    procedure SetCidade(const Value: String);
+    procedure SetCodigo(const Value: Integer);
+    procedure SetNome(const Value: String);
+    procedure SetUF(const Value: String);
+
+  protected
+
+  public
+    constructor Create;
+    destructor Destroy; override;
+    function ValidaExiste(pCliente: Integer): Boolean;
+
+    property Codigo  : Integer   read FCodigo   write SetCodigo;
+    property Nome    : String    read FNome     write SetNome;
+    property Cidade  : String    read FCidade   write SetCidade;
+    property UF      : String    read FUF       write SetUF;
+  end;
+
+implementation
+var
+  Conexao: TConexao;
+
+
+{ TCliente }
+
+constructor TCliente.Create;
+begin
+  Conexao := TConexao.Create;
+end;
+
+destructor TCliente.Destroy;
+begin
+  Conexao.Free;
+  inherited;
+end;
+
+procedure TCliente.SetCidade(const Value: String);
+begin
+  FCidade := Value;
+end;
+
+procedure TCliente.SetCodigo(const Value: Integer);
+begin
+  FCodigo := Value;
+end;
+
+procedure TCliente.SetNome(const Value: String);
+begin
+  FNome := Value;
+end;
+
+procedure TCliente.SetUF(const Value: String);
+begin
+  FUF := Value;
+end;
+
+function TCliente.ValidaExiste(pCliente: Integer): Boolean;
+begin
+  Result := False;
+end;
+
+end.
+
